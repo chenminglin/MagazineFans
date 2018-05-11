@@ -4,6 +4,7 @@ import com.bethena.magazinefans.di.DaggerAppComponent;
 
 import dagger.android.AndroidInjector;
 import dagger.android.support.DaggerApplication;
+import timber.log.Timber;
 
 public class MagazineApp extends DaggerApplication {
     @Override
@@ -12,4 +13,9 @@ public class MagazineApp extends DaggerApplication {
     }
 
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        Timber.plant(new Timber.DebugTree());
+    }
 }

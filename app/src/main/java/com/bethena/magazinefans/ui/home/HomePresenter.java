@@ -15,12 +15,22 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import timber.log.Timber;
 
 public class HomePresenter extends BasePresenter<HomeContract.View> implements HomeContract.Presenter {
 
@@ -38,26 +48,38 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
         Retrofit.Builder retrofitBuilder = new Retrofit.Builder();
         retrofitBuilder.client(okHttpClient);
         retrofitBuilder.baseUrl(BuildConfig.BASE_URL);
+        retrofitBuilder.addCallAdapterFactory(RxJava2CallAdapterFactory.create());
         Gson gson = new Gson();
         retrofitBuilder.addConverterFactory(GsonConverterFactory.create(gson));
         Retrofit retrofit = retrofitBuilder.build();
 
         ApiService apiService = retrofit.create(ApiService.class);
 
-        Call<DataWrapper<Banner>> call = apiService.getBanner("3","0");
-        call.enqueue(new Callback<DataWrapper<Banner>>() {
-            @Override
-            public void onResponse(Call<DataWrapper<Banner>> call, Response<DataWrapper<Banner>> response) {
-                Log.d(TAG,"message = "+response.message());
-                Log.d(TAG,"message = "+response.body().focus.size());
+        Observable<DataWrapper<Banner>> observable = apiService.getBanner("3", "0");
+        observable
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<DataWrapper<Banner>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-            }
+                    }
 
-            @Override
-            public void onFailure(Call<DataWrapper<Banner>> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
+                    @Override
+                    public void onNext(DataWrapper<Banner> bannerDataWrapper) {
+                        Timber.tag(TAG).d("banner size = %d", bannerDataWrapper.focus.size());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Timber.tag(TAG).e(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Timber.d("oncomplete....");
+                    }
+                });
 
 
     }
