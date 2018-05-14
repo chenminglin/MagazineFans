@@ -1,5 +1,6 @@
 package com.bethena.magazinefans.core;
 
+import android.app.Activity;
 import android.content.Context;
 
 import javax.inject.Inject;
@@ -11,12 +12,16 @@ public abstract class BaseFragment<P extends IPresenter> extends DaggerFragment 
     @Inject
     public P mPresenter;
 
+    protected Activity mActivity;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (mPresenter != null) {
             mPresenter.attachView(this);
         }
+
+        mActivity = (Activity) context;
     }
 
     @Override
@@ -25,5 +30,7 @@ public abstract class BaseFragment<P extends IPresenter> extends DaggerFragment 
         if (mPresenter != null) {
             mPresenter.detachView();
         }
+
+        mActivity = null;
     }
 }
