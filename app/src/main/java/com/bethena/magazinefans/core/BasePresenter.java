@@ -19,8 +19,7 @@ public abstract class BasePresenter<V extends IView> implements IPresenter<V> {
     protected CompositeDisposable mCompositeDisposable;
 
 
-    public BasePresenter(V view) {
-        attachView(view);
+    public BasePresenter() {
     }
 
     @Override

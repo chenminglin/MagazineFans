@@ -23,8 +23,7 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
 
 
     @Inject
-    public HomePresenter(HomeContract.View view, Repository repository) {
-        super(view);
+    public HomePresenter(Repository repository) {
         mRepository = repository;
 
         mBanners = new ArrayList<>();
@@ -32,11 +31,16 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
     }
 
 
-
-
     @Override
     public void loadBanner() {
-
+        mRepository.getBanner()
+                .compose(this.<DataWrapper<Banner>>applySchedulers())
+                .subscribe(new BaseObserver<DataWrapper<Banner>>(mView, this) {
+                    @Override
+                    public void onNext(DataWrapper<Banner> bannerDataWrapper) {
+                        mView.onLoadBannerComplete(bannerDataWrapper.focus);
+                    }
+                });
     }
 
     @Override

@@ -15,11 +15,15 @@ import com.bethena.magazinefans.ui.home.HomeFragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import dagger.android.support.DaggerAppCompatActivity;
 
 public class MainActivity extends DaggerAppCompatActivity {
 
     private ViewPager mViewPager;
+    @Inject
+    HomeFragment mHomeFragment;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -54,12 +58,11 @@ public class MainActivity extends DaggerAppCompatActivity {
 
         mViewPager = findViewById(R.id.viewpager);
 
-        HomeFragment homeFragment = new HomeFragment();
         HomeFragment homeFragment1 = new HomeFragment();
         HomeFragment homeFragment2 = new HomeFragment();
 
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(homeFragment);
+        fragments.add(mHomeFragment);
         fragments.add(homeFragment1);
         fragments.add(homeFragment2);
 
