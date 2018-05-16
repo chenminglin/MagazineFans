@@ -1,7 +1,7 @@
 package com.bethena.magazinefans;
 
-import com.bethena.magazinefans.data.Repository;
 import com.bethena.magazinefans.di.DaggerAppComponent;
+import com.facebook.stetho.Stetho;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;
@@ -28,6 +28,8 @@ public class MagazineApp extends DaggerApplication {
 
 
         Timber.d(gson.toString());
+
+        Stetho.initializeWithDefaults(this);
 
     }
 }

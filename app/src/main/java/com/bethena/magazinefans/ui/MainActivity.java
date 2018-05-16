@@ -1,6 +1,7 @@
 package com.bethena.magazinefans.ui;
 
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,8 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.bethena.magazinefans.R;
+import com.bethena.magazinefans.core.BaseActivity;
+import com.bethena.magazinefans.ui.category.CateFragment;
 import com.bethena.magazinefans.ui.home.HomeFragment;
 
 import java.util.ArrayList;
@@ -18,34 +21,22 @@ import java.util.List;
 import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
+import me.yokeyword.fragmentation.SupportFragment;
 
-public class MainActivity extends DaggerAppCompatActivity {
+public class MainActivity extends BaseActivity {
 
-    private ViewPager mViewPager;
+    private static final String CURRENT_FRAGMENT_INDEX_KEY = "CURRENT_FRAGMENT_INDEX_KEY";
+
     @Inject
     HomeFragment mHomeFragment;
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+    @Inject
+    CateFragment mCateFragment;
 
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    mViewPager.setCurrentItem(0);
-                    return true;
-                case R.id.navigation_dashboard:
-                    mViewPager.setCurrentItem(1);
-                    return true;
-                case R.id.navigation_notifications:
-                    mViewPager.setCurrentItem(2);
-                    return true;
-                default:
-                    break;
-            }
-            return false;
-        }
-    };
+
+    List<SupportFragment> mFragments = new ArrayList<>();
+    int mFragmentIndex = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,21 +47,57 @@ public class MainActivity extends DaggerAppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
 
-        mViewPager = findViewById(R.id.viewpager);
+        HomeFragment homeFragment = findFragment(HomeFragment.class);
 
-        HomeFragment homeFragment1 = new HomeFragment();
-        HomeFragment homeFragment2 = new HomeFragment();
+        if (homeFragment != null) {
+            mHomeFragment = homeFragment;
+            mCateFragment = findFragment(CateFragment.class);
+            mFragments.add(mHomeFragment);
+            mFragments.add(mCateFragment);
+        } else {
+            mFragments.add(mHomeFragment);
+            mFragments.add(mCateFragment);
+            loadMultipleRootFragment(R.id.fl_container, mFragmentIndex, mHomeFragment, mCateFragment);
+        }
 
-        List<Fragment> fragments = new ArrayList<>();
-        fragments.add(mHomeFragment);
-        fragments.add(homeFragment1);
-        fragments.add(homeFragment2);
-
-        MainPagerAdapter mainPagerAdapter = new MainPagerAdapter(fragments, getSupportFragmentManager());
-        mViewPager.setAdapter(mainPagerAdapter);
-
-        mViewPager.setOffscreenPageLimit(3);
-
+        if(savedInstanceState!=null){
+            mFragmentIndex = savedInstanceState.getInt(CURRENT_FRAGMENT_INDEX_KEY);
+        }
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt(CURRENT_FRAGMENT_INDEX_KEY, mFragmentIndex);
+        super.onSaveInstanceState(outState);
+    }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            SupportFragment currentFragment = mFragments.get(mFragmentIndex);
+            switch (item.getItemId()) {
+                case R.id.navigation_home:
+                    mFragmentIndex = 0;
+                    showHideFragment(mFragments.get(mFragmentIndex), currentFragment);
+                    return true;
+                case R.id.navigation_dashboard:
+                    mFragmentIndex = 1;
+                    showHideFragment(mFragments.get(mFragmentIndex), currentFragment);
+                    return true;
+                case R.id.navigation_notifications:
+                    mFragmentIndex = 2;
+                    showHideFragment(mFragments.get(mFragmentIndex), currentFragment);
+                    return true;
+                default:
+                    mFragmentIndex = 0;
+                    break;
+            }
+
+            showHideFragment(mFragments.get(mFragmentIndex), currentFragment);
+            return false;
+        }
+    };
 
 }

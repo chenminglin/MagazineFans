@@ -3,7 +3,6 @@ package com.bethena.magazinefans.ui.home;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -16,14 +15,16 @@ import com.bethena.magazinefans.R;
 import com.bethena.magazinefans.bean.Banner;
 import com.bethena.magazinefans.bean.HomeData;
 import com.bethena.magazinefans.core.BaseFragment;
-import com.bethena.magazinefans.di.ActivityScoped;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-public class HomeFragment extends BaseFragment<HomeContract.Presenter> implements HomeContract.View, BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
+public class HomeFragment extends BaseFragment<HomeContract.Presenter> implements
+        HomeContract.View,
+        BaseQuickAdapter.RequestLoadMoreListener,
+        SwipeRefreshLayout.OnRefreshListener {
 
     RecyclerView mRecyclerView;
     SwipeRefreshLayout mRefreshLayout;
@@ -33,8 +34,7 @@ public class HomeFragment extends BaseFragment<HomeContract.Presenter> implement
 
     ViewPager mBannerViewPager;
 
-    @Inject
-    HomeContract.Presenter mPresenter;
+
 
     @Inject
     public HomeFragment() {
@@ -84,11 +84,14 @@ public class HomeFragment extends BaseFragment<HomeContract.Presenter> implement
 //        });
 
         mHomeAdapter.addHeaderView(mHeaderView);
-
-        mPresenter.loadList();
-        mPresenter.loadBanner();
     }
 
+    @Override
+    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
+        super.onLazyInitView(savedInstanceState);
+        mPresenter.refreshList();
+        mPresenter.loadBanner();
+    }
 
     @Override
     public void onError() {
@@ -106,8 +109,11 @@ public class HomeFragment extends BaseFragment<HomeContract.Presenter> implement
 
     @Override
     public void onLoadListComplete(List<HomeData> homeDatas, boolean isRefresh) {
-        if (isRefresh) {
+        if (mRefreshLayout.isRefreshing()) {
             mRefreshLayout.setRefreshing(false);
+        }
+
+        if (isRefresh) {
             mHomeAdapter.setNewData(homeDatas);
         } else {
             mHomeAdapter.addData(homeDatas);
@@ -133,7 +139,7 @@ public class HomeFragment extends BaseFragment<HomeContract.Presenter> implement
 
     @Override
     public void onRefresh() {
-        mPresenter.loadList();
+        mPresenter.refreshList();
         mPresenter.loadBanner();
     }
 }

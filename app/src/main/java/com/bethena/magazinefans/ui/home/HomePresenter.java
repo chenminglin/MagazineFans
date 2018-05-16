@@ -12,6 +12,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import timber.log.Timber;
+
 public class HomePresenter extends BasePresenter<HomeContract.View> implements HomeContract.Presenter {
     Repository mRepository;
 
@@ -43,35 +45,37 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
                 });
     }
 
-    @Override
-    public void loadList() {
+    private void loadList() {
         mRepository.getHomeList(mPage)
                 .compose(this.<DataWrapper<HomeData>>applySchedulers())
                 .subscribe(new BaseObserver<DataWrapper<HomeData>>(mView, this) {
 
                     @Override
                     public void onNext(DataWrapper<HomeData> homeDataDataWrapper) {
+                        Timber.tag(TAG).d("getHomeList onNext");
                         if (mPage == 1) {
                             mHomeDatas.clear();
                             mHomeDatas.addAll(homeDataDataWrapper.data);
                         }
 
-
                         if (homeDataDataWrapper.data.size() == 0 && mHomeDatas.size() == 0) {
                             mView.onEmpty();
-                            return;
                         } else if (homeDataDataWrapper.data.size() == 0 && mHomeDatas.size() != 0) {
                             mView.onLoadNoMore();
-                            return;
                         } else if (mPage == 1) {
                             mView.onLoadListComplete(mHomeDatas, true);
                         } else {
                             mView.onLoadListComplete(homeDataDataWrapper.data, false);
                         }
-
-
+//                        mView.onLoadListComplete(homeDataDataWrapper.data, true);
                     }
                 });
+    }
+
+    @Override
+    public void refreshList() {
+        mPage = 1;
+        loadList();
     }
 
     @Override

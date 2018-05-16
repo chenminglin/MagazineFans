@@ -22,7 +22,7 @@ public interface HomeContract {
     interface Presenter extends IPresenter<HomeContract.View> {
         void loadBanner();
 
-        void loadList();
+        void refreshList();
 
         void loadMoreList();
 

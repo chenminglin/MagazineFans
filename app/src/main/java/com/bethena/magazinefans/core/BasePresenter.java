@@ -12,7 +12,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public abstract class BasePresenter<V extends IView> implements IPresenter<V> {
 
-    protected final String TAG = getClass().getSimpleName();
+    protected final String TAG = getClass().getCanonicalName();
 
     protected V mView;
 
