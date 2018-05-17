@@ -5,9 +5,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class DataWrapper<T> {
-    public String status;
+    public int status;
     public String error;
-    public List<T> focus;
-    @SerializedName(value = "new")
+    @SerializedName(value = "new", alternate = {"focus", "data", "magazine"})
     public List<T> data;
 }

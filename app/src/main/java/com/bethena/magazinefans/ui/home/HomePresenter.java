@@ -2,7 +2,7 @@ package com.bethena.magazinefans.ui.home;
 
 import com.bethena.magazinefans.bean.Banner;
 import com.bethena.magazinefans.bean.DataWrapper;
-import com.bethena.magazinefans.bean.HomeData;
+import com.bethena.magazinefans.bean.MagazineConcept;
 import com.bethena.magazinefans.core.BaseObserver;
 import com.bethena.magazinefans.core.BasePresenter;
 import com.bethena.magazinefans.data.Repository;
@@ -19,7 +19,7 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
 
 
     List<Banner> mBanners;
-    List<HomeData> mHomeDatas;
+    List<MagazineConcept> mMagazineConcepts;
 
     int mPage = 1;
 
@@ -29,43 +29,43 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
         mRepository = repository;
 
         mBanners = new ArrayList<>();
-        mHomeDatas = new ArrayList<>();
+        mMagazineConcepts = new ArrayList<>();
     }
 
 
     @Override
     public void loadBanner() {
         mRepository.getBanner()
-                .compose(this.<DataWrapper<Banner>>applySchedulers())
-                .subscribe(new BaseObserver<DataWrapper<Banner>>(mView, this) {
+                .compose(this.<List<Banner>>applySchedulers())
+                .subscribe(new BaseObserver<List<Banner>>(mView,this) {
                     @Override
-                    public void onNext(DataWrapper<Banner> bannerDataWrapper) {
-                        mView.onLoadBannerComplete(bannerDataWrapper.focus);
+                    public void onNext(List<Banner> banners) {
+                        mView.onLoadBannerComplete(banners);
                     }
                 });
     }
 
     private void loadList() {
         mRepository.getHomeList(mPage)
-                .compose(this.<DataWrapper<HomeData>>applySchedulers())
-                .subscribe(new BaseObserver<DataWrapper<HomeData>>(mView, this) {
+                .compose(this.<List<MagazineConcept>>applySchedulers())
+                .subscribe(new BaseObserver<List<MagazineConcept>>(mView, this) {
 
                     @Override
-                    public void onNext(DataWrapper<HomeData> homeDataDataWrapper) {
+                    public void onNext(List<MagazineConcept> data) {
                         Timber.tag(TAG).d("getHomeList onNext");
                         if (mPage == 1) {
-                            mHomeDatas.clear();
-                            mHomeDatas.addAll(homeDataDataWrapper.data);
+                            mMagazineConcepts.clear();
+                            mMagazineConcepts.addAll(data);
                         }
 
-                        if (homeDataDataWrapper.data.size() == 0 && mHomeDatas.size() == 0) {
+                        if (data.size() == 0 && mMagazineConcepts.size() == 0) {
                             mView.onEmpty();
-                        } else if (homeDataDataWrapper.data.size() == 0 && mHomeDatas.size() != 0) {
+                        } else if (data.size() == 0 && mMagazineConcepts.size() != 0) {
                             mView.onLoadNoMore();
                         } else if (mPage == 1) {
-                            mView.onLoadListComplete(mHomeDatas, true);
+                            mView.onLoadListComplete(mMagazineConcepts, true);
                         } else {
-                            mView.onLoadListComplete(homeDataDataWrapper.data, false);
+                            mView.onLoadListComplete(data, false);
                         }
 //                        mView.onLoadListComplete(homeDataDataWrapper.data, true);
                     }
@@ -85,7 +85,7 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
     }
 
     @Override
-    public List<HomeData> getHomeDatas() {
-        return mHomeDatas;
+    public List<MagazineConcept> getHomeDatas() {
+        return mMagazineConcepts;
     }
 }

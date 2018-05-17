@@ -1,6 +1,6 @@
 package com.bethena.magazinefans.bean;
 
-public class HomeData {
+public class MagazineConcept {
     public String magCover;
     public String magDate;
     public String magId;

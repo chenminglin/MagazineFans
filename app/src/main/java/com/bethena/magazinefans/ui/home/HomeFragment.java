@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 import com.bethena.magazinefans.R;
 import com.bethena.magazinefans.bean.Banner;
-import com.bethena.magazinefans.bean.HomeData;
+import com.bethena.magazinefans.bean.MagazineConcept;
 import com.bethena.magazinefans.core.BaseFragment;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
@@ -108,15 +108,15 @@ public class HomeFragment extends BaseFragment<HomeContract.Presenter> implement
     }
 
     @Override
-    public void onLoadListComplete(List<HomeData> homeDatas, boolean isRefresh) {
+    public void onLoadListComplete(List<MagazineConcept> magazineConcepts, boolean isRefresh) {
         if (mRefreshLayout.isRefreshing()) {
             mRefreshLayout.setRefreshing(false);
         }
 
         if (isRefresh) {
-            mHomeAdapter.setNewData(homeDatas);
+            mHomeAdapter.setNewData(magazineConcepts);
         } else {
-            mHomeAdapter.addData(homeDatas);
+            mHomeAdapter.addData(magazineConcepts);
         }
 
         mHomeAdapter.loadMoreComplete();

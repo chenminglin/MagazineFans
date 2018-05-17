@@ -1,8 +1,5 @@
 package com.bethena.magazinefans.core;
 
-import com.bethena.magazinefans.bean.DataWrapper;
-
-
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;

@@ -1,7 +1,7 @@
 package com.bethena.magazinefans.ui.home;
 
 import com.bethena.magazinefans.bean.Banner;
-import com.bethena.magazinefans.bean.HomeData;
+import com.bethena.magazinefans.bean.MagazineConcept;
 import com.bethena.magazinefans.core.IPresenter;
 import com.bethena.magazinefans.core.IView;
 
@@ -12,7 +12,7 @@ public interface HomeContract {
     interface View extends IView<HomeContract.Presenter> {
         void onLoadBannerComplete(List<Banner> banners);
 
-        void onLoadListComplete(List<HomeData> homeDatas, boolean isRefresh);
+        void onLoadListComplete(List<MagazineConcept> magazineConcepts, boolean isRefresh);
 
         void onEmpty();
 
@@ -26,7 +26,7 @@ public interface HomeContract {
 
         void loadMoreList();
 
-        List<HomeData> getHomeDatas();
+        List<MagazineConcept> getHomeDatas();
 
     }
 }

@@ -38,6 +38,8 @@ public class MainActivity extends BaseActivity {
     int mFragmentIndex = 0;
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +62,7 @@ public class MainActivity extends BaseActivity {
             loadMultipleRootFragment(R.id.fl_container, mFragmentIndex, mHomeFragment, mCateFragment);
         }
 
-        if(savedInstanceState!=null){
+        if (savedInstanceState != null) {
             mFragmentIndex = savedInstanceState.getInt(CURRENT_FRAGMENT_INDEX_KEY);
         }
     }
