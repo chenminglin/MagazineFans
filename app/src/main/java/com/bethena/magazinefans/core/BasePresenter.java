@@ -1,5 +1,9 @@
 package com.bethena.magazinefans.core;
 
+import org.reactivestreams.Publisher;
+
+import io.reactivex.Flowable;
+import io.reactivex.FlowableTransformer;
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -42,15 +46,13 @@ public abstract class BasePresenter<V extends IView> implements IPresenter<V> {
     }
 
 
-    protected <T> ObservableTransformer<T, T> applySchedulers() {
-        return new ObservableTransformer<T, T>() {
+    protected <T> FlowableTransformer<T, T> applySchedulers() {
+        return new FlowableTransformer<T, T>() {
             @Override
-            public Observable<T> apply(Observable<T> observable) {
-                return observable.subscribeOn(Schedulers.io())
+            public Publisher<T> apply(Flowable<T> upstream) {
+                return upstream.subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread());
             }
         };
     }
-
-
 }

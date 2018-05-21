@@ -65,7 +65,7 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements
 
 
         mRecyclerView = view.findViewById(R.id.recycler_view);
-        mRefreshLayout = view.findViewById(R.id.refreshLayout);
+        mRefreshLayout = view.findViewById(R.id.refresh_layout);
         mHeaderView = mActivity.getLayoutInflater().inflate(R.layout.banner_home, (ViewGroup) mRecyclerView.getParent(), false);
 
         mBannerViewPager = mHeaderView.findViewById(R.id.view_pager_banner);

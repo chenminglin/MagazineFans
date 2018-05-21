@@ -9,6 +9,6 @@ import dagger.android.ContributesAndroidInjector;
 @Module
 public abstract class AllModule {
     @ChildFragmentScoped
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector(modules = NameModule.class)
     abstract NameFragment nameFragment();
 }

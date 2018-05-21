@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.ObservableTransformer;
@@ -23,26 +24,33 @@ public class Repository extends BaseRepository {
     }
 
 
-    public Observable<List<Banner>> getBanner() {
+    public Flowable<List<Banner>> getBanner() {
         return mApiService.getBanner(3, 0)
                 .compose(this.<Banner>transResult());
     }
 
-    public Observable<List<MagazineConcept>> getHomeList(int page) {
+    public Flowable<List<MagazineConcept>> getHomeList(int page) {
         return mApiService.getHomeList(30, page)
                 .compose(this.<MagazineConcept>transResult());
     }
 
-    public Observable<List<Category>> getCategory() {
+    public Flowable<List<Category>> getCategory() {
         return mApiService.getCategory()
                 .compose(this.<Category>transResult());
     }
 
-    public Observable<List<MagazineConcept>> getMagazinesByCate(int size,
-                                                                       int page,
-                                                                       int cate,
-                                                                       @Nullable Integer brand) {
+    public Flowable<List<MagazineConcept>> getMagazinesByCate(int size,
+                                                                int page,
+                                                                int cate,
+                                                                @Nullable Integer brand) {
         return mApiService.getMagazinesByCate(size, page, cate, brand)
+                .compose(this.<MagazineConcept>transResult());
+    }
+
+    public Flowable<List<MagazineConcept>> getMagzinesByLetter(int size,
+                                                               int page,
+                                                               String letter) {
+        return mApiService.getMagzinesByLetter(size, page, letter)
                 .compose(this.<MagazineConcept>transResult());
     }
 }

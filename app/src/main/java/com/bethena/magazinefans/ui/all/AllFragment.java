@@ -24,6 +24,9 @@ import static android.support.design.widget.TabLayout.*;
 
 public class AllFragment extends BaseFragment<AllPresenter> implements AllContract.View {
 
+    final char START_WIHT_LETTER_FIRST = 'A';
+    final char START_WIHT_LETTER_LAST = 'Z';
+
 
     TabLayout mTabLayout;
 
@@ -51,25 +54,20 @@ public class AllFragment extends BaseFragment<AllPresenter> implements AllContra
         super.onViewCreated(view, savedInstanceState);
 
         mTabLayout = view.findViewById(R.id.tab_layout);
-
         mViewPager = view.findViewById(R.id.view_pager);
-
 
         List<Fragment> fragmentList = new ArrayList<>();
         List<String> titles = new ArrayList<>();
 
-        for (char c = 'A'; c <= 'Z'; c++) {
+        for (char c = START_WIHT_LETTER_FIRST; c <= START_WIHT_LETTER_LAST; c++) {
             NameFragment nameFragment = NameFragment.newInstance(String.valueOf(c));
             fragmentList.add(nameFragment);
             titles.add(String.valueOf(c));
         }
 
-
         AllViewPagerAdapter adapter = new AllViewPagerAdapter(getChildFragmentManager(), fragmentList, titles);
-
+        mViewPager.setOffscreenPageLimit(fragmentList.size());
         mViewPager.setAdapter(adapter);
-
-
         mTabLayout.setupWithViewPager(mViewPager);
 
     }

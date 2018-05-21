@@ -1,9 +1,8 @@
 package com.bethena.magazinefans.ui.home;
 
 import com.bethena.magazinefans.bean.Banner;
-import com.bethena.magazinefans.bean.DataWrapper;
 import com.bethena.magazinefans.bean.MagazineConcept;
-import com.bethena.magazinefans.core.BaseObserver;
+import com.bethena.magazinefans.core.BaseSubscriber;
 import com.bethena.magazinefans.core.BasePresenter;
 import com.bethena.magazinefans.data.Repository;
 
@@ -37,7 +36,7 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
     public void loadBanner() {
         mRepository.getBanner()
                 .compose(this.<List<Banner>>applySchedulers())
-                .subscribe(new BaseObserver<List<Banner>>(mView,this) {
+                .subscribe(new BaseSubscriber<List<Banner>>(mView,this) {
                     @Override
                     public void onNext(List<Banner> banners) {
                         mView.onLoadBannerComplete(banners);
@@ -48,7 +47,7 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
     private void loadList() {
         mRepository.getHomeList(mPage)
                 .compose(this.<List<MagazineConcept>>applySchedulers())
-                .subscribe(new BaseObserver<List<MagazineConcept>>(mView, this) {
+                .subscribe(new BaseSubscriber<List<MagazineConcept>>(mView, this) {
 
                     @Override
                     public void onNext(List<MagazineConcept> data) {
