@@ -4,6 +4,7 @@ import com.bethena.magazinefans.bean.Banner;
 import com.bethena.magazinefans.bean.Category;
 import com.bethena.magazinefans.bean.DataWrapper;
 import com.bethena.magazinefans.bean.MagazineConcept;
+import com.bethena.magazinefans.bean.MagazineDetail;
 
 import java.util.List;
 
@@ -52,5 +53,11 @@ public class Repository extends BaseRepository {
                                                                String letter) {
         return mApiService.getMagzinesByLetter(size, page, letter)
                 .compose(this.<MagazineConcept>transResult());
+    }
+
+
+    public Flowable<List<MagazineDetail>> getMagzine(int magaId) {
+        return mApiService.getMagzine(magaId)
+                .compose(this.<MagazineDetail>transResult());
     }
 }

@@ -7,6 +7,6 @@ import java.util.List;
 public class DataWrapper<T> {
     public int status;
     public String error;
-    @SerializedName(value = "new", alternate = {"focus", "data", "magazine"})
+    @SerializedName(value = "new", alternate = {"focus", "data", "magazine", "content"})
     public List<T> data;
 }

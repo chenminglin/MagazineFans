@@ -4,6 +4,7 @@ import com.bethena.magazinefans.bean.Banner;
 import com.bethena.magazinefans.bean.Category;
 import com.bethena.magazinefans.bean.DataWrapper;
 import com.bethena.magazinefans.bean.MagazineConcept;
+import com.bethena.magazinefans.bean.MagazineDetail;
 
 import javax.annotation.Nullable;
 
@@ -35,4 +36,7 @@ public interface ApiService {
             @Query("s") int size,
             @Query("p") int page,
             @Query("l") String letter);
+
+    @POST("show.php")
+    Flowable<DataWrapper<MagazineDetail>> getMagzine(@Query("a") int magaId);
 }

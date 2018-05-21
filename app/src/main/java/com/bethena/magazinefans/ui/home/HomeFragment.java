@@ -1,5 +1,6 @@
 package com.bethena.magazinefans.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,11 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bethena.magazinefans.Constants;
 import com.bethena.magazinefans.R;
 import com.bethena.magazinefans.bean.Banner;
 import com.bethena.magazinefans.bean.MagazineConcept;
 import com.bethena.magazinefans.core.BaseFragment;
 import com.bethena.magazinefans.ui.MainActivity;
+import com.bethena.magazinefans.ui.maga.MagaActivity;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import java.util.List;
@@ -36,8 +39,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements
     View mHeaderView;
 
     ViewPager mBannerViewPager;
-
-
 
 
     @Inject
@@ -79,13 +80,14 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements
         mHomeAdapter.setOnLoadMoreListener(this, mRecyclerView);
 
 
-//        mHomeAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-//                View v = mActivity.getLayoutInflater().inflate(R.layout.item_banner, (ViewGroup) mRecyclerView.getParent(), false);
-//                mHomeAdapter.addHeaderView(v);
-//            }
-//        });
+
+        mHomeAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                MagazineConcept magazineConcept = mPresenter.getHomeDatas().get(position);
+                MagaActivity.start(mActivity, magazineConcept.magId);
+            }
+        });
 
         mHomeAdapter.addHeaderView(mHeaderView);
     }

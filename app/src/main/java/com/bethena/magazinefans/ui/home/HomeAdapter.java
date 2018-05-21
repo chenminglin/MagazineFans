@@ -23,6 +23,6 @@ public class HomeAdapter extends BaseQuickAdapter<MagazineConcept, BaseViewHolde
 
         ImageLoader.loadCenterImg(mContext, item.magCover).into((ImageView) helper.getView(R.id.img_cover));
 
-        helper.addOnClickListener(R.id.img_cover);
+//        helper.addOnClickListener(R.id.img_cover);
     }
 }

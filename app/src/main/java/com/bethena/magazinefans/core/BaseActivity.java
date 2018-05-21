@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
+import com.bethena.magazinefans.R;
+
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
@@ -36,5 +38,13 @@ public abstract class BaseActivity extends SupportActivity
     @Override
     public AndroidInjector<android.app.Fragment> fragmentInjector() {
         return frameworkFragmentInjector;
+    }
+
+
+    protected void replaceFragment(int containerId, Fragment fragment) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(containerId, fragment)
+                .commitAllowingStateLoss();
     }
 }
