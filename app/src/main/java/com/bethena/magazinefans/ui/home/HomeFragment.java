@@ -15,13 +15,16 @@ import com.bethena.magazinefans.R;
 import com.bethena.magazinefans.bean.Banner;
 import com.bethena.magazinefans.bean.MagazineConcept;
 import com.bethena.magazinefans.core.BaseFragment;
+import com.bethena.magazinefans.ui.MainActivity;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-public class HomeFragment extends BaseFragment<HomeContract.Presenter> implements
+import timber.log.Timber;
+
+public class HomeFragment extends BaseFragment<HomePresenter> implements
         HomeContract.View,
         BaseQuickAdapter.RequestLoadMoreListener,
         SwipeRefreshLayout.OnRefreshListener {
@@ -36,6 +39,7 @@ public class HomeFragment extends BaseFragment<HomeContract.Presenter> implement
 
 
 
+
     @Inject
     public HomeFragment() {
 
@@ -44,7 +48,6 @@ public class HomeFragment extends BaseFragment<HomeContract.Presenter> implement
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
     }
 
@@ -59,6 +62,7 @@ public class HomeFragment extends BaseFragment<HomeContract.Presenter> implement
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
 
         mRecyclerView = view.findViewById(R.id.recycler_view);
         mRefreshLayout = view.findViewById(R.id.refreshLayout);

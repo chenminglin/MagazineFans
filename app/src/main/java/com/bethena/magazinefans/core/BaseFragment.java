@@ -13,7 +13,9 @@ import dagger.android.support.DaggerFragment;
 import dagger.android.support.HasSupportFragmentInjector;
 import me.yokeyword.fragmentation.SupportFragment;
 
-public abstract class BaseFragment<P extends IPresenter> extends SupportFragment implements HasSupportFragmentInjector, IView<P> {
+public abstract class BaseFragment<P extends IPresenter> extends SupportFragment implements HasSupportFragmentInjector, IView {
+
+    protected final String TAG = getClass().getCanonicalName();
 
     @Inject
     public P mPresenter;

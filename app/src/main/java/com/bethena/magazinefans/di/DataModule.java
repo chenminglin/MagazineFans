@@ -15,29 +15,29 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
-public abstract class DataModule {
+public class DataModule {
 
     @Provides
     @Singleton
-    static OkHttpClient.Builder provideOkHttpBuilder() {
+    OkHttpClient.Builder provideOkHttpBuilder() {
         return new OkHttpClient.Builder();
     }
 
     @Provides
     @Singleton
-    static OkHttpClient provideOkHttpClient(OkHttpClient.Builder httpBuilder) {
+    OkHttpClient provideOkHttpClient(OkHttpClient.Builder httpBuilder) {
         return httpBuilder.build();
     }
 
     @Provides
     @Singleton
-    static Gson provideGson() {
+    Gson provideGson() {
         return new Gson();
     }
 
     @Provides
     @Singleton
-    static Retrofit.Builder provideRetrofitBuilder(OkHttpClient okHttpClient, Gson gson) {
+    Retrofit.Builder provideRetrofitBuilder(OkHttpClient okHttpClient, Gson gson) {
         Retrofit.Builder retrofitBuilder = new Retrofit.Builder();
         retrofitBuilder.client(okHttpClient);
         retrofitBuilder.baseUrl(BuildConfig.BASE_URL);
@@ -48,19 +48,19 @@ public abstract class DataModule {
 
     @Provides
     @Singleton
-    static Retrofit provideRetrofit(Retrofit.Builder retrofitBuilder) {
+    Retrofit provideRetrofit(Retrofit.Builder retrofitBuilder) {
         return retrofitBuilder.build();
     }
 
     @Provides
     @Singleton
-    static ApiService provideApiService(Retrofit retrofit) {
+    ApiService provideApiService(Retrofit retrofit) {
         return retrofit.create(ApiService.class);
     }
 
     @Provides
     @Singleton
-    static Repository provideRepository(ApiService apiService) {
+    Repository provideRepository(ApiService apiService) {
         return new Repository(apiService);
     }
 }

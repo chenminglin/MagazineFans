@@ -19,17 +19,16 @@ import java.util.List;
 import javax.inject.Inject;
 
 
-public class CateFragment extends BaseFragment<CateContract.Presenter> implements CateContract.View {
-
-
-    @Inject
-    public CateFragment() {
-    }
+public class CateFragment extends BaseFragment<CatePresenter> implements CateContract.View {
 
 
     RecyclerView mRecyclerView;
 
     CateAdapter mAdapter;
+
+    @Inject
+    public CateFragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

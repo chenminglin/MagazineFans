@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CateContract {
 
-    interface View extends IView<CateContract.Presenter>{
+    interface View extends IView{
         void onLoadDataComplete(List<CateViewModel> modelList);
     }
 

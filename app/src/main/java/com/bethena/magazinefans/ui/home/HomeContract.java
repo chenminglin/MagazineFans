@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface HomeContract {
 
-    interface View extends IView<HomeContract.Presenter> {
+    interface View extends IView {
         void onLoadBannerComplete(List<Banner> banners);
 
         void onLoadListComplete(List<MagazineConcept> magazineConcepts, boolean isRefresh);

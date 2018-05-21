@@ -3,15 +3,18 @@ package com.bethena.magazinefans.ui;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.bethena.magazinefans.R;
 import com.bethena.magazinefans.core.BaseActivity;
+import com.bethena.magazinefans.ui.all.AllFragment;
 import com.bethena.magazinefans.ui.category.CateFragment;
 import com.bethena.magazinefans.ui.home.HomeFragment;
 
@@ -33,11 +36,14 @@ public class MainActivity extends BaseActivity {
     @Inject
     CateFragment mCateFragment;
 
+    @Inject
+    AllFragment mAllFragment;
+
+    Toolbar mToolbar;
+
 
     List<SupportFragment> mFragments = new ArrayList<>();
     int mFragmentIndex = 0;
-
-
 
 
     @Override
@@ -45,9 +51,11 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
 
         HomeFragment homeFragment = findFragment(HomeFragment.class);
 
@@ -56,15 +64,19 @@ public class MainActivity extends BaseActivity {
             mCateFragment = findFragment(CateFragment.class);
             mFragments.add(mHomeFragment);
             mFragments.add(mCateFragment);
+            mFragments.add(mAllFragment);
         } else {
             mFragments.add(mHomeFragment);
             mFragments.add(mCateFragment);
-            loadMultipleRootFragment(R.id.fl_container, mFragmentIndex, mHomeFragment, mCateFragment);
+            mFragments.add(mAllFragment);
+            loadMultipleRootFragment(R.id.fl_container, mFragmentIndex, mHomeFragment, mCateFragment, mAllFragment);
         }
 
         if (savedInstanceState != null) {
             mFragmentIndex = savedInstanceState.getInt(CURRENT_FRAGMENT_INDEX_KEY);
         }
+
+        setToolbarTitleOfIndex(mFragmentIndex);
     }
 
     @Override
@@ -83,14 +95,17 @@ public class MainActivity extends BaseActivity {
                 case R.id.navigation_home:
                     mFragmentIndex = 0;
                     showHideFragment(mFragments.get(mFragmentIndex), currentFragment);
+                    setToolbarTitleOfIndex(mFragmentIndex);
                     return true;
                 case R.id.navigation_dashboard:
                     mFragmentIndex = 1;
                     showHideFragment(mFragments.get(mFragmentIndex), currentFragment);
+                    setToolbarTitleOfIndex(mFragmentIndex);
                     return true;
                 case R.id.navigation_notifications:
                     mFragmentIndex = 2;
                     showHideFragment(mFragments.get(mFragmentIndex), currentFragment);
+                    setToolbarTitleOfIndex(mFragmentIndex);
                     return true;
                 default:
                     mFragmentIndex = 0;
@@ -102,4 +117,25 @@ public class MainActivity extends BaseActivity {
         }
     };
 
+    public void setToolbarTitle(@StringRes int stringId) {
+        mToolbar.setTitle(stringId);
+    }
+
+
+    public void setToolbarTitleOfIndex(int index) {
+        switch (index) {
+            case 0:
+                setToolbarTitle(R.string.title_home);
+                break;
+            case 1:
+                setToolbarTitle(R.string.title_category);
+                break;
+            case 2:
+                setToolbarTitle(R.string.title_all);
+                break;
+            default:
+                setToolbarTitle(R.string.title_home);
+                break;
+        }
+    }
 }
