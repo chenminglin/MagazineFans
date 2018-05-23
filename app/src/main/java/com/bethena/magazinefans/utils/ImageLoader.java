@@ -3,7 +3,9 @@ package com.bethena.magazinefans.utils;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v4.util.LruCache;
+import android.widget.ImageView;
 
+import com.bethena.magazinefans.di.AppComponent;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.request.RequestOptions;
@@ -29,4 +31,11 @@ public class ImageLoader {
     private static RequestOptions getOption(String key) {
         return GLIDE_OPTION_CACHE.get(key);
     }
+
+
+
+    public static void releaseImg(Context context,ImageView imageView){
+        Glide.with(context).clear(imageView);
+    }
+
 }

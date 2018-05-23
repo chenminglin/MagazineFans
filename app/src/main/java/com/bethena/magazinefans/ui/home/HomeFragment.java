@@ -20,6 +20,7 @@ import com.bethena.magazinefans.core.BaseFragment;
 import com.bethena.magazinefans.ui.MainActivity;
 import com.bethena.magazinefans.ui.maga.MagaActivity;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 
 import java.util.List;
 
@@ -78,7 +79,6 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements
         mRecyclerView.setLayoutManager(new GridLayoutManager(mActivity, 2));
         mRecyclerView.setAdapter(mHomeAdapter);
         mHomeAdapter.setOnLoadMoreListener(this, mRecyclerView);
-
 
 
         mHomeAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -147,5 +147,28 @@ public class HomeFragment extends BaseFragment<HomePresenter> implements
     public void onRefresh() {
         mPresenter.refreshList();
         mPresenter.loadBanner();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        int count = mRecyclerView.getChildCount();
+        Timber.tag(TAG).d("getChildCount = " + count);
+
+        for (int position = 0; position <= count; position++) {
+            View itemView = mRecyclerView.getChildAt(position);
+            Timber.tag(TAG).d("position = " + position);
+            if (itemView == null) {
+                continue;
+            }
+            RecyclerView.ViewHolder viewHolder = mRecyclerView.getChildViewHolder(itemView);
+            if (viewHolder instanceof HomeAdapter.HomeViewHolder) {
+//                viewHolder
+                ((HomeAdapter.HomeViewHolder) viewHolder).releaseImages();
+            }
+            Timber.tag(TAG).d("viewHolder = " + viewHolder);
+        }
+
     }
 }
