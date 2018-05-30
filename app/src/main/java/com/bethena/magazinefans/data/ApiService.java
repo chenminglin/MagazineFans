@@ -19,6 +19,9 @@ public interface ApiService {
     Flowable<DataWrapper<Banner>> getBanner(@Query("s") int size, @Query("p") int page);
 
     @POST("index.php")
+    Observable<DataWrapper<Banner>> getBannerObs(@Query("s") int size, @Query("p") int page);
+
+    @POST("index.php")
     Flowable<DataWrapper<MagazineConcept>> getHomeList(@Query("s") int size, @Query("p") int page);
 
     @POST("cate.php")

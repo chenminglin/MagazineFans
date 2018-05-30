@@ -11,6 +11,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 public class HomePresenter extends BasePresenter<HomeContract.View> implements HomeContract.Presenter {
@@ -34,12 +36,36 @@ public class HomePresenter extends BasePresenter<HomeContract.View> implements H
 
     @Override
     public void loadBanner() {
-        mRepository.getBanner()
-                .compose(this.<List<Banner>>applySchedulers())
-                .subscribe(new BaseSubscriber<List<Banner>>(mView,this) {
+//        mRepository.getBanner()
+//                .compose(this.<List<Banner>>applySchedulers())
+//                .subscribe(new BaseSubscriber<List<Banner>>(mView,this) {
+//                    @Override
+//                    public void onNext(List<Banner> banners) {
+//                        mView.onLoadBannerComplete(banners);
+//                    }
+//                });
+
+        mRepository.getBannerObs()
+                .compose(this.<List<Banner>>applySchedulersObs())
+                .subscribe(new Observer<List<Banner>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
                     @Override
                     public void onNext(List<Banner> banners) {
                         mView.onLoadBannerComplete(banners);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
                     }
                 });
     }

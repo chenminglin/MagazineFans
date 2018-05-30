@@ -15,10 +15,17 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.functions.Function;
+import io.rx_cache2.DynamicKeyGroup;
 
 public class Repository extends BaseRepository {
 
     ApiService mApiService;
+    RxCacheProviders mRxCacheProviders;
+
+    public Repository(ApiService apiService, RxCacheProviders rxCacheProviders) {
+        mApiService = apiService;
+        mRxCacheProviders = rxCacheProviders;
+    }
 
     public Repository(ApiService apiService) {
         mApiService = apiService;
@@ -28,6 +35,19 @@ public class Repository extends BaseRepository {
     public Flowable<List<Banner>> getBanner() {
         return mApiService.getBanner(3, 0)
                 .compose(this.<Banner>transResult());
+    }
+
+
+    public Observable<List<Banner>> getBannerObs() {
+
+        return mRxCacheProviders
+                .getBanner(mApiService.getBannerObs(3, 0)
+                                .compose(this.<Banner>transResultObs()),
+                        new DynamicKeyGroup(3, 0));
+
+
+//        return mApiService.getBannerObs(3, 0)
+//                .compose(this.<Banner>transResultObs());
     }
 
     public Flowable<List<MagazineConcept>> getHomeList(int page) {
@@ -41,9 +61,9 @@ public class Repository extends BaseRepository {
     }
 
     public Flowable<List<MagazineConcept>> getMagazinesByCate(int size,
-                                                                int page,
-                                                                int cate,
-                                                                @Nullable Integer brand) {
+                                                              int page,
+                                                              int cate,
+                                                              @Nullable Integer brand) {
         return mApiService.getMagazinesByCate(size, page, cate, brand)
                 .compose(this.<MagazineConcept>transResult());
     }

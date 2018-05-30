@@ -19,6 +19,8 @@ public abstract class BaseActivity extends SupportActivity
         implements HasFragmentInjector, HasSupportFragmentInjector {
 
 
+    protected final String TAG = getClass().getCanonicalName();
+
     @Inject
     DispatchingAndroidInjector<Fragment> supportFragmentInjector;
     @Inject
